@@ -10,12 +10,13 @@ const Time:FC = () => {
     let [hour, hourSet] = useState<number>(date.getHours());
 
     useEffect(() => {
-        secSet(sec++);
         setInterval(start, 1000)
-    }, [])
+    }, [ ])
+
+
 
     function start(){
-        secSet(sec++);
+        secSet(sec += 1);
         if(sec === 60) {
             secSet(sec = 0);
             minSet(min += 1)
@@ -26,6 +27,37 @@ const Time:FC = () => {
             hourSet(hour = 0)
         }
     }
+
+    function autoTime(){
+        const hourAuto = Number(prompt(`${hour} часов`));
+        const minAuto = Number(prompt(`${min} минуты`));
+
+        if (hourAuto){
+            hourUpdate(hourAuto)
+        } else if (hourAuto === NaN){
+            alert("В часах указали строку")
+        }
+
+        if (minAuto){
+            minUpdate(minAuto)
+        } else if (minAuto === NaN){
+            alert("В минутах указали строку")
+        }
+    }
+
+    function hourUpdate(hourUpdate:number){
+        hourSet(hourUpdate)
+    }
+
+    function minUpdate(minUpdate:number){
+        minSet(minUpdate)
+    }
+
+    function reset(){
+        hourSet(hour = date.getHours());
+        minSet( min = date.getMinutes());
+        secSet( sec = date.getSeconds())
+    }
     return (
         <div>
             <div>
@@ -33,6 +65,14 @@ const Time:FC = () => {
             </div>
             <div>
                 <span>Current time is: </span><span id="time">{`${hour}:${min}:${sec}`}</span>
+            </div>
+            <div className="d-flex">
+            <div>
+                <button onClick={autoTime} className="btn btn-outline-primary">Изменить время</button>
+            </div>
+            <div>
+                <button onClick={reset} className="btn btn-outline-dark mx-2">Сброс</button>
+            </div>
             </div>
         </div>
     );
